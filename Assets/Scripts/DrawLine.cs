@@ -42,8 +42,7 @@ public class DrawLine : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            rigidBody.bodyType = RigidbodyType2D.Dynamic;
-            rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            FinishLine();
         }
     }
 
@@ -73,5 +72,11 @@ public class DrawLine : MonoBehaviour
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(lineRenderer.positionCount-1, newFingerPos);
         edgeCollider.points = fingerPositions.ToArray();
+    }
+
+    private void FinishLine()
+    {
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
+        rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 }
