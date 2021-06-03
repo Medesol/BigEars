@@ -43,6 +43,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             rigidBody.bodyType = RigidbodyType2D.Dynamic;
+            rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         }
     }
 
