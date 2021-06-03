@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class DrawLine : MonoBehaviour
 
     public LineRenderer lineRenderer;
     public EdgeCollider2D edgeCollider;
+    public Rigidbody2D rigidBody;
     
     // receive input from the user
     public List<Vector2> fingerPositions;
@@ -37,6 +39,11 @@ public class DrawLine : MonoBehaviour
                 UpdateLine(tempFingerPos);
             }
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            rigidBody.bodyType = RigidbodyType2D.Dynamic;
+        }
     }
 
     void CreateLine()
@@ -44,6 +51,7 @@ public class DrawLine : MonoBehaviour
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         lineRenderer = currentLine.GetComponent<LineRenderer>();
         edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
+        rigidBody = currentLine.GetComponent<Rigidbody2D>();
         // Create a new line
         fingerPositions.Clear();
         // The line needs at least two points to be drown
@@ -54,6 +62,8 @@ public class DrawLine : MonoBehaviour
         
         // update the edge collider
         edgeCollider.points = fingerPositions.ToArray();
+
+        rigidBody.bodyType = RigidbodyType2D.Static;
     }
 
     void UpdateLine(Vector2 newFingerPos)
