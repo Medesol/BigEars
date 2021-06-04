@@ -10,7 +10,7 @@ public class LineController : MonoBehaviour
 
     public EdgeCollider2D edgeCollider;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         edgeCollider = gameObject.GetComponent<EdgeCollider2D>();
@@ -18,11 +18,23 @@ public class LineController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (rigidBody.bodyType == RigidbodyType2D.Dynamic)
+        CalCenterOfMass();
+    }
+
+    private void CalCenterOfMass()
+    {
+        if (rigidBody.bodyType != RigidbodyType2D.Dynamic) return;
+        Vector2[] points = edgeCollider.points;
+        float sumX = 0, sumY = 0;
+        int len = points.Length;
+        foreach (var point in points)
         {
-            rigidBody.centerOfMass = rigidBody.position;
+            sumX += point.x;
+            sumY += point.y;
         }
+
+        rigidBody.centerOfMass = new Vector2(sumX/len, sumY/len);
     }
 }
