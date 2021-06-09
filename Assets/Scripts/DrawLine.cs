@@ -12,12 +12,13 @@ public class DrawLine : MonoBehaviour
     public LineRenderer lineRenderer;
     public EdgeCollider2D edgeCollider;
     public Rigidbody2D rigidBody;
+    public LineController lineControl;
     
     // receive input from the user
     public List<Vector2> fingerPositions;
     public List<GameObject> lines;
     public bool erase = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +76,7 @@ public class DrawLine : MonoBehaviour
         lineRenderer = currentLine.GetComponent<LineRenderer>();
         edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
         rigidBody = currentLine.GetComponent<Rigidbody2D>();
+        lineControl = currentLine.GetComponent<LineController>();
         // Create a new line
         fingerPositions.Clear();
         // The line needs at least two points to be drown
@@ -101,6 +103,6 @@ public class DrawLine : MonoBehaviour
     {
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        lines.Add(currentLine);
+        lineControl.onFinished();
     }
 }
