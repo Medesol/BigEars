@@ -15,6 +15,8 @@ public class DrawLine : MonoBehaviour
     
     // receive input from the user
     public List<Vector2> fingerPositions;
+    public List<GameObject> lines;
+    public bool erase = false;
     
     // Start is called before the first frame update
     void Start()
@@ -28,10 +30,29 @@ public class DrawLine : MonoBehaviour
         // left click
         if (Input.GetMouseButtonDown(0))
         {
-            CreateLine();
+            Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //GameObject g = Utils.Raycast(Camera.main, screenMousePosition, 1 << 8); 
+            int i = 0;
+            while(i < lines.Count) {
+                lineRenderer = lines[i].GetComponent<LineRenderer>();
+                for(int j = 0; j < lineRenderer.positionCount; j++) {
+                    if (Vector2.Distance(screenMousePosition, lines[i].transform.TransformPoint(lineRenderer.GetPosition(j))) < 0.1f) {
+                        //Debug.Log(screenMousePosition);
+                        //Debug.Log(lineRenderer.GetPosition(j));
+                        erase = true;
+                        GameObject temp = lines[i];
+                        lines.Remove(temp);
+                        Destroy(temp);
+                        i--;
+                        break;
+                    }
+                }
+                i++;
+            }
+            if (!erase)  CreateLine();
         }
 
-        if (Input.GetMouseButton(0))
+        if (!erase && Input.GetMouseButton(0))
         {
             Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]) > .1f)
@@ -42,13 +63,15 @@ public class DrawLine : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            FinishLine();
+            if (erase) erase = false;
+            else FinishLine();
         }
     }
 
     void CreateLine()
     {
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
+        currentLine.layer = 1 << 3;
         lineRenderer = currentLine.GetComponent<LineRenderer>();
         edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
         rigidBody = currentLine.GetComponent<Rigidbody2D>();
@@ -78,5 +101,6 @@ public class DrawLine : MonoBehaviour
     {
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        lines.Add(currentLine);
     }
 }
