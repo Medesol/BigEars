@@ -36,7 +36,7 @@ public class DrawLine : MonoBehaviour
             while(i < lines.Count) {
                 lineRenderer = lines[i].GetComponent<LineRenderer>();
                 for(int j = 0; j < lineRenderer.positionCount; j++) {
-                    if (Vector2.Distance(screenMousePosition, lineRenderer.GetPosition(j)) < 0.09f) {
+                    if (Vector2.Distance(screenMousePosition, lines[i].transform.TransformPoint(lineRenderer.GetPosition(j))) < 0.1f) {
                         //Debug.Log(screenMousePosition);
                         //Debug.Log(lineRenderer.GetPosition(j));
                         erase = true;
