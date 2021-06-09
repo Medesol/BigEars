@@ -37,4 +37,22 @@ public class LineController : MonoBehaviour
 
         rigidBody.centerOfMass = new Vector2(sumX/len, sumY/len);
     }
+
+    public void onFinished()
+    {
+        // if (rigidBody.velocity.magnitude < 0.01f)
+        //     rigidBody.bodyType = RigidbodyType2D.Static;
+        StartCoroutine(CheckVelocity());
+    }
+
+    private IEnumerator CheckVelocity()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.5f);
+            if (!(rigidBody.velocity.magnitude < 0.01f)) continue;
+            rigidBody.bodyType = RigidbodyType2D.Static;
+            break;
+        }
+    }
 }
