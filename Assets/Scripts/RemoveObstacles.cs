@@ -21,9 +21,9 @@ public class RemoveObstacles : MonoBehaviour
             Debug.Log("Hitting right button");
             Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var hitLeft = Physics2D.Raycast(screenMousePosition,
-                transform.TransformDirection(Vector2.left), castLength);
+                transform.TransformDirection(Vector2.left), castLength, layerMask);
             var hitRight = Physics2D.Raycast(screenMousePosition,
-                transform.TransformDirection(Vector2.right), castLength);
+                transform.TransformDirection(Vector2.right), castLength, layerMask);
 
             if (hitLeft && hitRight && hitLeft.collider == hitRight.collider)
             {
