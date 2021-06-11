@@ -190,13 +190,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114231493902538710, guid: 50936cccdb69523458c1b42052ebafff,
         type: 3}
+      propertyPath: m_JumpForce
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 114231493902538710, guid: 50936cccdb69523458c1b42052ebafff,
+        type: 3}
       propertyPath: m_WhatIsGround.m_Bits
-      value: 53
+      value: 309
       objectReference: {fileID: 0}
     - target: {fileID: 114435281327171648, guid: 50936cccdb69523458c1b42052ebafff,
         type: 3}
       propertyPath: cam
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 199702487371442802, guid: 50936cccdb69523458c1b42052ebafff,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199720515671813628, guid: 50936cccdb69523458c1b42052ebafff,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
@@ -1032,6 +1047,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5, y: 100}
   m_EdgeRadius: 0
+--- !u!1 &2023542839 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3150843144738716720, guid: f9482a785c9104b6f861e8822d854cbb,
+    type: 3}
+  m_PrefabInstance: {fileID: 370309150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2023542842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023542839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a499e440d57a84e92a8c75c8a6049683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2025440353
 GameObject:
   m_ObjectHideFlags: 0
@@ -1305,6 +1338,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ObstacleRock
+      objectReference: {fileID: 0}
+    - target: {fileID: 7729362985541223822, guid: 01b3c04bc331e4e76a8c94878786b6cb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01b3c04bc331e4e76a8c94878786b6cb, type: 3}

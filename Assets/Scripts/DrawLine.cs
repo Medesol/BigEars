@@ -72,7 +72,7 @@ public class DrawLine : MonoBehaviour
     void CreateLine()
     {
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
-        currentLine.layer = 1 << 3;
+        currentLine.layer = 8;
         lineRenderer = currentLine.GetComponent<LineRenderer>();
         edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
         rigidBody = currentLine.GetComponent<Rigidbody2D>();
