@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RemoveObstacles : MonoBehaviour
 {
-    private int layerMask = 1 << 9;
+    public LayerMask layerMask;
 
     private int castLength = 30;
     // Start is called before the first frame update
