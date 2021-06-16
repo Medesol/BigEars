@@ -54,6 +54,9 @@ MonoBehaviour:
   fingerPositions: []
   lines: []
   erase: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &-347302811214766290
 MonoBehaviour:
   m_ObjectHideFlags: 0
