@@ -18,6 +18,8 @@ public class DrawLine : MonoBehaviour
     public List<Vector2> fingerPositions;
     public List<GameObject> lines;
     public bool erase = false;
+    public LayerMask layerMask;
+    private float castLength = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +33,7 @@ public class DrawLine : MonoBehaviour
         // left click
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            /*Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //GameObject g = Utils.Raycast(Camera.main, screenMousePosition, 1 << 8); 
             int i = 0;
             while(i < lines.Count) {
@@ -50,10 +52,11 @@ public class DrawLine : MonoBehaviour
                 }
                 i++;
             }
-            if (!erase)  CreateLine();
+            if (!erase)  CreateLine();*/
+            CreateLine();
         }
 
-        if (!erase && Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
             Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]) > .1f)
@@ -64,15 +67,46 @@ public class DrawLine : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (erase) erase = false;
-            else FinishLine();
+            FinishLine();
+        }
+
+        if (Input.GetMouseButtonDown(1)) {
+        	RemoveLine();
+        }
+
+        if (Input.GetMouseButton(1)) {
+        	RemoveLine();
+        }
+
+    }
+
+    void RemoveLine() {
+       	Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hitLeft = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.left), castLength, layerMask);
+        if (hitLeft) {
+        	Debug.Log("left");
+        	Destroy(hitLeft.collider.gameObject);
+        }
+        var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), castLength, layerMask);
+        if (hitRight) {
+        	Debug.Log("right");
+        	Destroy(hitRight.collider.gameObject);
+        }
+		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), castLength, layerMask);
+        if (hitUp) {
+        	Debug.Log("up");
+        	Destroy(hitUp.collider.gameObject);
+        }
+        var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), castLength, layerMask);
+    	if (hitDown) {
+        	Debug.Log("down");
+        	Destroy(hitDown.collider.gameObject);
         }
     }
 
     void CreateLine()
     {
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
-        currentLine.layer = 1 << 3;
         lineRenderer = currentLine.GetComponent<LineRenderer>();
         edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
         rigidBody = currentLine.GetComponent<Rigidbody2D>();

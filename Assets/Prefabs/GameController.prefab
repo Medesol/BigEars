@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3150843144738716722}
   - component: {fileID: 3150843144738716721}
+  - component: {fileID: -347302811214766290}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -49,6 +50,25 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   edgeCollider: {fileID: 0}
   rigidBody: {fileID: 0}
+  lineControl: {fileID: 0}
   fingerPositions: []
   lines: []
   erase: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &-347302811214766290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3150843144738716720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a499e440d57a84e92a8c75c8a6049683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 512
