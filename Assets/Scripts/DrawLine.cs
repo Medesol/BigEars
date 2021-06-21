@@ -20,11 +20,13 @@ public class DrawLine : MonoBehaviour
     public bool erase = false;
     public LayerMask layerMask;
     private float castLength = 0.2f;
+    private float distance = 0.0f;
+    private float totalDistance = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+     	   
     }
 
     // Update is called once per frame
@@ -59,8 +61,10 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]) > .1f)
+            float tempDistance = Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]);
+            if (tempDistance > .1f)
             {
+            	distance += tempDistance;
                 UpdateLine(tempFingerPos);
             }
         }
@@ -68,6 +72,9 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             FinishLine();
+            totalDistance += distance;
+            distance = 0.0f;
+            Debug.Log(totalDistance);
         }
 
         if (Input.GetMouseButtonDown(1)) {
@@ -123,6 +130,8 @@ public class DrawLine : MonoBehaviour
         edgeCollider.points = fingerPositions.ToArray();
 
         rigidBody.bodyType = RigidbodyType2D.Static;
+
+        distance = 0.0f;
     }
 
     void UpdateLine(Vector2 newFingerPos)
