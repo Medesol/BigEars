@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
 	public float life = 10;
+	public float damageByObs = 4;
 	private bool isPlat;
 	private bool isObstacle;
 	private Transform fallCheck;
@@ -74,7 +76,19 @@ public class Enemy : MonoBehaviour {
 			life -= damage;
 			rb.velocity = Vector2.zero;
 			rb.AddForce(new Vector2(direction * 500f, 100f));
-			StartCoroutine(HitTime());
+			StartCoroutine(HitTime(0.1f));
+		}
+	}
+
+	public void ApplyDamageByObs()
+	{
+		if (!isInvincible)
+		{
+			transform.GetComponent<Animator>().SetBool("Hit", true);
+			life -= damageByObs;
+			rb.velocity = Vector2.zero;
+			rb.AddForce(new Vector2(500f, 100f));
+			StartCoroutine(HitTime(5f));
 		}
 	}
 
@@ -86,11 +100,19 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	IEnumerator HitTime()
+	private void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.gameObject.tag == "Obstacle")
+		{
+			ApplyDamageByObs();
+		}
+	}
+
+	IEnumerator HitTime(float time)
 	{
 		isHitted = true;
 		isInvincible = true;
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(time);
 		isHitted = false;
 		isInvincible = false;
 	}
