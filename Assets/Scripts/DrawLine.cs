@@ -22,6 +22,8 @@ public class DrawLine : MonoBehaviour
     private float castLength = 0.2f;
     private float distance = 0.0f;
     private float totalDistance = 0.0f;
+    private float maxLength = 15.0f;
+    private float totalLength = 100.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -32,50 +34,58 @@ public class DrawLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // left click
-        if (Input.GetMouseButtonDown(0))
-        {
-            /*Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //GameObject g = Utils.Raycast(Camera.main, screenMousePosition, 1 << 8); 
-            int i = 0;
-            while(i < lines.Count) {
-                lineRenderer = lines[i].GetComponent<LineRenderer>();
-                for(int j = 0; j < lineRenderer.positionCount; j++) {
-                    if (Vector2.Distance(screenMousePosition, lines[i].transform.TransformPoint(lineRenderer.GetPosition(j))) < 0.1f) {
-                        //Debug.Log(screenMousePosition);
-                        //Debug.Log(lineRenderer.GetPosition(j));
-                        erase = true;
-                        GameObject temp = lines[i];
-                        lines.Remove(temp);
-                        Destroy(temp);
-                        i--;
-                        break;
-                    }
-                }
-                i++;
-            }
-            if (!erase)  CreateLine();*/
-            CreateLine();
-        }
+    	if (totalDistance < totalLength) {
+	        // left click
+	        if (Input.GetMouseButtonDown(0))
+	        {
+	            /*Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+	            //GameObject g = Utils.Raycast(Camera.main, screenMousePosition, 1 << 8); 
+	            int i = 0;
+	            while(i < lines.Count) {
+	                lineRenderer = lines[i].GetComponent<LineRenderer>();
+	                for(int j = 0; j < lineRenderer.positionCount; j++) {
+	                    if (Vector2.Distance(screenMousePosition, lines[i].transform.TransformPoint(lineRenderer.GetPosition(j))) < 0.1f) {
+	                        //Debug.Log(screenMousePosition);
+	                        //Debug.Log(lineRenderer.GetPosition(j));
+	                        erase = true;
+	                        GameObject temp = lines[i];
+	                        lines.Remove(temp);
+	                        Destroy(temp);
+	                        i--;
+	                        break;
+	                    }
+	                }
+	                i++;
+	            }
+	            if (!erase)  CreateLine();*/
+	            CreateLine();
+	        }
 
-        if (Input.GetMouseButton(0))
-        {
-            Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            float tempDistance = Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]);
-            if (tempDistance > .1f)
-            {
-            	distance += tempDistance;
-                UpdateLine(tempFingerPos);
-            }
-        }
+	        if (Input.GetMouseButton(0))
+	        {
+	        	if (distance < maxLength && totalDistance < totalLength) {
+		            Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		            float tempDistance = Vector2.Distance(tempFingerPos, fingerPositions[fingerPositions.Count - 1]);
+		            if (tempDistance > .1f)
+		            {
+		            	distance += tempDistance;
+		            	totalDistance += tempDistance;
+		                UpdateLine(tempFingerPos);
+		            }
+	        	} else {
+	        		Debug.Log("not enough ink");
+	        	}
+	        }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            FinishLine();
-            totalDistance += distance;
-            distance = 0.0f;
-            Debug.Log(totalDistance);
-        }
+	        if (Input.GetMouseButtonUp(0))
+	        {
+	            FinishLine();
+	            distance = 0.0f;
+	            Debug.Log(totalDistance);
+	        }
+	    } else {
+	    	Debug.Log("not enough ink");
+	    }
 
         if (Input.GetMouseButtonDown(1)) {
         	RemoveLine();
