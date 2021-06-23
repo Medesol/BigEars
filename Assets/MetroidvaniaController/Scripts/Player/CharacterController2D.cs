@@ -43,6 +43,8 @@ public class CharacterController2D : MonoBehaviour
 	private float jumpWallDistX = 0; //Distance between player and wall
 	private bool limitVelOnWallJump = false; //For limit wall jump distance with low fps
 
+    private float currTime;
+
 	[Header("Events")]
 	[Space]
 
@@ -54,6 +56,8 @@ public class CharacterController2D : MonoBehaviour
 
 	private void Awake()
 	{
+        currTime = Time.time;
+        Debug.Log("awake time "+ currTime);
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 
@@ -68,15 +72,33 @@ public class CharacterController2D : MonoBehaviour
     {
         if (col.gameObject.tag == "Key")
         {
-            AnalyticsResult gameResult = Analytics.CustomEvent(
-                "levelComplete",
-                new Dictionary<string, object>
-                {
-                    { "level name", SceneManager.GetActiveScene().name }
-                }
-            );
-            //Debug.Log("status: " + gameResult);
-            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            Debug.Log("complete duration " + (Time.time - currTime));
+            // switch level based on scence
+            int currLvl = SceneManager.GetActiveScene().buildIndex;
+            if (currLvl == 0)
+            {
+                AnalyticsResult gameResult = Analytics.CustomEvent(
+                    "level0_complete",
+                    new Dictionary<string, object>
+                    {
+                        { "level name", SceneManager.GetActiveScene().name },
+                        { "duration", Time.time - currTime }
+                    }
+                );
+                SceneManager.LoadSceneAsync(currLvl + 1);
+            }
+            else if (currLvl == 1)
+            {
+                AnalyticsResult gameResult = Analytics.CustomEvent(
+                    "level1_complete",
+                    new Dictionary<string, object>
+                    {
+                        { "level name", SceneManager.GetActiveScene().name },
+                        { "duration", Time.time - currTime }
+                    }
+                );
+                SceneManager.LoadSceneAsync(0);
+            }
         }
     }
 
@@ -151,7 +173,7 @@ public class CharacterController2D : MonoBehaviour
 	public void Move(float move, bool jump, bool dash)
 	{
 		if (canMove) {
-			if (dash && canDash && !isWallSliding)
+            if (dash && canDash && !isWallSliding)
 			{
 				//m_Rigidbody2D.AddForce(new Vector2(transform.localScale.x * m_DashForce, 0f));
 				StartCoroutine(DashCooldown());

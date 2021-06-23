@@ -10,6 +10,7 @@ public class KillZone : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            // send analytics
             AnalyticsResult gameResult = Analytics.CustomEvent(
                 "gameOver_fall_below",
                 new Dictionary<string, object>
@@ -21,8 +22,10 @@ public class KillZone : MonoBehaviour
 
             //Debug.Log("scecne: " + SceneManager.GetActiveScene().name);
             //Debug.Log("Log: " + (col.gameObject.transform.position.x + 5.5)/70);
-            Debug.Log("status: " + gameResult);
+
+            //Debug.Log("status: " + gameResult);
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+
         }
         else
         {
