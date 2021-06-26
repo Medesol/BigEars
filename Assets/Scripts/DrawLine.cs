@@ -23,7 +23,15 @@ public class DrawLine : MonoBehaviour
     private float distance = 0.0f;
     private float totalDistance = 0.0f;
     private float maxLength = 15.0f;
-    private float totalLength = 100.0f;
+    private float totalLength = 150.0f;
+    private Dictionary<LineRenderer, float> distanceInfo = new Dictionary<LineRenderer, float>();
+
+    float GetLength(GameObject line) {
+    	lineRenderer = line.GetComponent<LineRenderer>();
+    	float result = 0;
+    	for(int i = 0; i < lineRenderer.positionCount - 1; i++) result += Vector2.Distance(line.transform.TransformPoint(lineRenderer.GetPosition(i)), line.transform.TransformPoint(lineRenderer.GetPosition(i + 1)));
+    	return result; 
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -74,17 +82,25 @@ public class DrawLine : MonoBehaviour
 		            }
 	        	} else {
 	        		Debug.Log("not enough ink");
+	        		FinishLine();
+	        		if (!distanceInfo.ContainsKey(lineRenderer)) distanceInfo.Add(lineRenderer, distance);
+	        		distance = 0.0f;
 	        	}
 	        }
 
 	        if (Input.GetMouseButtonUp(0))
 	        {
 	            FinishLine();
+	            Debug.Log(distance);
+	            if (!distanceInfo.ContainsKey(lineRenderer)) distanceInfo.Add(lineRenderer, distance);
 	            distance = 0.0f;
 	            Debug.Log(totalDistance);
 	        }
 	    } else {
 	    	Debug.Log("not enough ink");
+	        FinishLine();
+	        if (!distanceInfo.ContainsKey(lineRenderer)) distanceInfo.Add(lineRenderer, distance);
+	        distance = 0.0f;
 	    }
 
         if (Input.GetMouseButtonDown(1)) {
@@ -100,23 +116,43 @@ public class DrawLine : MonoBehaviour
     void RemoveLine() {
        	Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var hitLeft = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.left), castLength, layerMask);
-        if (hitLeft) {
+        if (hitLeft && distanceInfo.ContainsKey(hitLeft.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("left");
+        	Debug.Log(totalDistance);
+        	//totalDistance -= GetLength(hitLeft.collider.gameObject);
+        	totalDistance -= distanceInfo[hitLeft.collider.gameObject.GetComponent<LineRenderer>()];
+        	distanceInfo.Remove(hitLeft.collider.gameObject.GetComponent<LineRenderer>());
+        	Debug.Log(totalDistance);
         	Destroy(hitLeft.collider.gameObject);
         }
         var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), castLength, layerMask);
-        if (hitRight) {
+        if (hitRight && distanceInfo.ContainsKey(hitRight.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("right");
+        	Debug.Log(totalDistance);
+        	//totalDistance -= GetLength(hitRight.collider.gameObject);
+        	totalDistance -= distanceInfo[hitRight.collider.gameObject.GetComponent<LineRenderer>()];
+        	distanceInfo.Remove(hitRight.collider.gameObject.GetComponent<LineRenderer>());
+        	Debug.Log(totalDistance);
         	Destroy(hitRight.collider.gameObject);
         }
 		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), castLength, layerMask);
-        if (hitUp) {
+        if (hitUp && distanceInfo.ContainsKey(hitUp.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("up");
+        	Debug.Log(totalDistance);
+        	//totalDistance -= GetLength(hitUp.collider.gameObject);
+        	totalDistance -= distanceInfo[hitUp.collider.gameObject.GetComponent<LineRenderer>()];
+        	distanceInfo.Remove(hitUp.collider.gameObject.GetComponent<LineRenderer>());
+        	Debug.Log(totalDistance);
         	Destroy(hitUp.collider.gameObject);
         }
         var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), castLength, layerMask);
-    	if (hitDown) {
+    	if (hitDown && distanceInfo.ContainsKey(hitDown.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("down");
+        	Debug.Log(totalDistance);
+        	//totalDistance -= GetLength(hitDown.collider.gameObject);
+        	totalDistance -= distanceInfo[hitDown.collider.gameObject.GetComponent<LineRenderer>()];
+        	distanceInfo.Remove(hitDown.collider.gameObject.GetComponent<LineRenderer>());
+        	Debug.Log(totalDistance);
         	Destroy(hitDown.collider.gameObject);
         }
     }
