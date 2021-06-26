@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TestScences/XinTestScenes.unity
+    path: Assets/Scenes/TestScences/Level0 Scene.unity
     guid: 52ca13cb189e0455d9bc9639cd1c4be2
   - enabled: 1
-    path: Assets/Scenes/TestScences/XiuxuanTest.unity
+    path: Assets/Scenes/TestScences/Level1 Scene.unity
+    guid: 432ad639f70994a3580e91b7a6e10282
+  - enabled: 1
+    path: Assets/Scenes/TestScences/Debug Scene.unity
     guid: b6a400003bd560d4087079cca16c95f8
   m_configObjects: {}
