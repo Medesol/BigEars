@@ -97,7 +97,19 @@ public class CharacterController2D : MonoBehaviour
                         { "duration", Time.time - currTime }
                     }
                 );
-                SceneManager.LoadSceneAsync(0);
+                SceneManager.LoadSceneAsync(currLvl + 1);
+            }
+            else if (currLvl == 2)
+            {
+                AnalyticsResult gameResult = Analytics.CustomEvent(
+                    "level2_complete",
+                    new Dictionary<string, object>
+                    {
+                        { "level name", SceneManager.GetActiveScene().name },
+                        { "duration", Time.time - currTime }
+                    }
+                );
+                SceneManager.LoadSceneAsync(currLvl + 1);
             }
         }
     }
