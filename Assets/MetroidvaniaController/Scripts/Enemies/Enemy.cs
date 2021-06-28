@@ -5,7 +5,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
 	public float life = 10;
-	public float damageByObs = 4;
+	public float damageByObs = 10;
 	private bool isPlat;
 	private bool isObstacle;
 	private Transform fallCheck;
