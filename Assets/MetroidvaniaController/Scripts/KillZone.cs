@@ -27,7 +27,7 @@ public class KillZone : MonoBehaviour
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 
         }
-        else
+        else if (col.gameObject.tag != "Line")
         {
             Destroy(col.gameObject);
         }
