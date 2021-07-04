@@ -22,7 +22,7 @@ public class DrawLine : MonoBehaviour
     private float castLength = 0.2f;
     private float distance = 0.0f;
     private float totalDistance = 0.0f;
-    private float maxLength = 15.0f;
+    public float maxLength = 15.0f;
     private float totalLength = 150.0f;
     private Dictionary<LineRenderer, float> distanceInfo = new Dictionary<LineRenderer, float>();
 
