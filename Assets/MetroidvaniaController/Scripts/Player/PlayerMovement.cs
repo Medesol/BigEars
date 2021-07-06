@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float runSpeed = 40f;
 
 	float horizontalMove = 0f;
+	private float verticalMove = 0f;
 	bool jump = false;
 	bool dash = false;
 
@@ -19,10 +20,16 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
 
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+		verticalMove = Input.GetAxisRaw("Vertical");
+
 
 		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-		if (Input.GetKeyDown(KeyCode.Z))
+		// if (Input.GetKeyDown(KeyCode.Z))
+		// {
+		// 	jump = true;
+		// }
+		if (verticalMove > 0.0001f)
 		{
 			jump = true;
 		}
