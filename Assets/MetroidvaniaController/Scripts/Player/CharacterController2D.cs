@@ -44,6 +44,7 @@ public class CharacterController2D : MonoBehaviour
 	private bool limitVelOnWallJump = false; //For limit wall jump distance with low fps
 
     private float currTime;
+    private bool hasKey = false;
 
 	[Header("Events")]
 	[Space]
@@ -72,44 +73,29 @@ public class CharacterController2D : MonoBehaviour
     {
         if (col.gameObject.tag == "Key")
         {
+            hasKey = true;
+            Destroy(col.gameObject);
+            Debug.Log("got key");
+        }
+
+        if (col.gameObject.tag == "Door")
+        {
             Debug.Log("complete duration " + (Time.time - currTime));
             // switch level based on scence
             int currLvl = SceneManager.GetActiveScene().buildIndex;
-            if (currLvl == 0)
+            if (hasKey)
             {
+                Debug.Log("level compelete");
                 AnalyticsResult gameResult = Analytics.CustomEvent(
-                    "level0_complete",
+                    "level" + currLvl + "_complete",
                     new Dictionary<string, object>
                     {
-                        { "level name", SceneManager.GetActiveScene().name },
-                        { "duration", Time.time - currTime }
+                    { "level name", SceneManager.GetActiveScene().name },
+                    { "duration", Time.time - currTime }
                     }
                 );
                 SceneManager.LoadSceneAsync(currLvl + 1);
-            }
-            else if (currLvl == 1)
-            {
-                AnalyticsResult gameResult = Analytics.CustomEvent(
-                    "level1_complete",
-                    new Dictionary<string, object>
-                    {
-                        { "level name", SceneManager.GetActiveScene().name },
-                        { "duration", Time.time - currTime }
-                    }
-                );
-                SceneManager.LoadSceneAsync(currLvl + 1);
-            }
-            else if (currLvl == 2)
-            {
-                AnalyticsResult gameResult = Analytics.CustomEvent(
-                    "level2_complete",
-                    new Dictionary<string, object>
-                    {
-                        { "level name", SceneManager.GetActiveScene().name },
-                        { "duration", Time.time - currTime }
-                    }
-                );
-                SceneManager.LoadSceneAsync(currLvl + 1);
+                Debug.Log(gameResult);
             }
         }
     }
