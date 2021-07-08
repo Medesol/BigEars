@@ -13,17 +13,19 @@ public class DrawLine : MonoBehaviour
     public EdgeCollider2D edgeCollider;
     public Rigidbody2D rigidBody;
     public LineController lineControl;
+    public int mode = 1;//1 for drawing, 0 for erasing
     
     // receive input from the user
     public List<Vector2> fingerPositions;
     public List<GameObject> lines;
-    public bool erase = false;
-    public LayerMask layerMask;
-    private float castLength = 0.2f;
+    public LayerMask lineLayerMask;
+    public LayerMask obstacleLayerMask;
+    private float lineCastLength = 0.2f;
+    private int obstacleCastLength = 30;
     private float distance = 0.0f;
-    private float totalDistance = 0.0f;
+    //private float totalDistance = 0.0f;
     public float maxLength = 15.0f;
-    private float totalLength = 150.0f;
+    //private float totalLength = 150.0f;
     private Dictionary<LineRenderer, float> distanceInfo = new Dictionary<LineRenderer, float>();
 
     float GetLength(GameObject line) {
@@ -43,12 +45,12 @@ public class DrawLine : MonoBehaviour
     void Update()
     {
 	    // left click
-	    if (Input.GetMouseButtonDown(0))
+	    if (Input.GetMouseButtonDown(0) && mode == 1)
 	    {
 	        CreateLine();
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && mode == 1)
         {
         	if (distance < maxLength) {
 	            Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -66,7 +68,7 @@ public class DrawLine : MonoBehaviour
         		//distance = 0.0f;
         	}
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && mode == 1)
         {
             FinishLine();
             Debug.Log(distance);
@@ -74,19 +76,34 @@ public class DrawLine : MonoBehaviour
             distance = 0.0f;
         }
 
-        if (Input.GetMouseButtonDown(1)) {
+        if (Input.GetMouseButtonDown(0) && mode == 0) {
         	RemoveLine();
+        	RemoveObstacle();
         }
 
-        if (Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(0) && mode == 0) {
         	RemoveLine();
+        	RemoveObstacle();
         }
 
     }
 
+    void RemoveObstacle() {
+    	Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hitLeft = Physics2D.Raycast(screenMousePosition,
+            transform.TransformDirection(Vector2.left), obstacleCastLength, obstacleLayerMask);
+        var hitRight = Physics2D.Raycast(screenMousePosition,
+            transform.TransformDirection(Vector2.right), obstacleCastLength, obstacleLayerMask);
+
+        if (hitLeft && hitRight && hitLeft.collider == hitRight.collider)
+        {
+            Destroy(hitLeft.collider.gameObject);
+        }
+    }
+
     void RemoveLine() {
        	Vector2 screenMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var hitLeft = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.left), castLength, layerMask);
+        var hitLeft = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.left), lineCastLength, lineLayerMask);
         if (hitLeft && !distanceInfo.ContainsKey(hitLeft.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("left");
         	//Debug.Log(totalDistance);
@@ -96,7 +113,7 @@ public class DrawLine : MonoBehaviour
         	//Debug.Log(totalDistance);
         	Destroy(hitLeft.collider.gameObject);
         }
-        var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), castLength, layerMask);
+        var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), lineCastLength, lineLayerMask);
         if (hitRight && !distanceInfo.ContainsKey(hitRight.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("right");
         	//Debug.Log(totalDistance);
@@ -106,7 +123,7 @@ public class DrawLine : MonoBehaviour
         	//Debug.Log(totalDistance);
         	Destroy(hitRight.collider.gameObject);
         }
-		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), castLength, layerMask);
+		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), lineCastLength, lineLayerMask);
         if (hitUp && !distanceInfo.ContainsKey(hitUp.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("up");
         	//Debug.Log(totalDistance);
@@ -116,7 +133,7 @@ public class DrawLine : MonoBehaviour
         	//Debug.Log(totalDistance);
         	Destroy(hitUp.collider.gameObject);
         }
-        var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), castLength, layerMask);
+        var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), lineCastLength, lineLayerMask);
     	if (hitDown && !distanceInfo.ContainsKey(hitDown.collider.gameObject.GetComponent<LineRenderer>())) {
         	Debug.Log("down");
         	//Debug.Log(totalDistance);
@@ -164,5 +181,15 @@ public class DrawLine : MonoBehaviour
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         lineControl.onFinished();
+    }
+
+    public void changeMode() {
+        if (mode == 0) {
+            mode = 1;
+            Debug.Log("Drawing");
+        }else if (mode == 1) {
+            mode = 0;
+            Debug.Log("Erasing");
+        }
     }
 }
