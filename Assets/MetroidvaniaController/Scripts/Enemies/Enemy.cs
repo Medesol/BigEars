@@ -5,9 +5,10 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
 	public float life = 10;
-	public float damageByObs = 4;
+	public float damageByObs = 10;
 	private bool isPlat;
 	private bool isObstacle;
+	private bool isLine;
 	private Transform fallCheck;
 	private Transform wallCheck;
 	public LayerMask turnLayerMask;
@@ -36,10 +37,10 @@ public class Enemy : MonoBehaviour {
 
 		isPlat = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
 		isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
-
+		isLine = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Line"));
 		if (!isHitted && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
 		{
-			if (isPlat && !isObstacle && !isHitted)
+			if ((isPlat||isLine) && !isObstacle && !isHitted)
 			{
 				if (facingRight)
 				{

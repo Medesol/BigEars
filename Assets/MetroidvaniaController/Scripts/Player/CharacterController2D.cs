@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 
 public class CharacterController2D : MonoBehaviour
@@ -41,6 +43,9 @@ public class CharacterController2D : MonoBehaviour
 	private float jumpWallDistX = 0; //Distance between player and wall
 	private bool limitVelOnWallJump = false; //For limit wall jump distance with low fps
 
+    private float currTime;
+    private bool hasKey = false;
+
 	[Header("Events")]
 	[Space]
 
@@ -52,6 +57,8 @@ public class CharacterController2D : MonoBehaviour
 
 	private void Awake()
 	{
+        currTime = Time.time;
+        Debug.Log("awake time "+ currTime);
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 
@@ -62,8 +69,38 @@ public class CharacterController2D : MonoBehaviour
 			OnLandEvent = new UnityEvent();
 	}
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Key")
+        {
+            hasKey = true;
+            Destroy(col.gameObject);
+            Debug.Log("got key");
+        }
 
-	private void FixedUpdate()
+        if (col.gameObject.tag == "Door")
+        {
+            Debug.Log("complete duration " + (Time.time - currTime));
+            // switch level based on scence
+            int currLvl = SceneManager.GetActiveScene().buildIndex;
+            if (hasKey)
+            {
+                Debug.Log("level compelete");
+                AnalyticsResult gameResult = Analytics.CustomEvent(
+                    "level" + currLvl + "_complete",
+                    new Dictionary<string, object>
+                    {
+                    { "level name", SceneManager.GetActiveScene().name },
+                    { "duration", Time.time - currTime }
+                    }
+                );
+                SceneManager.LoadSceneAsync(currLvl + 1);
+                Debug.Log(gameResult);
+            }
+        }
+    }
+
+    private void FixedUpdate()
 	{
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
@@ -134,7 +171,7 @@ public class CharacterController2D : MonoBehaviour
 	public void Move(float move, bool jump, bool dash)
 	{
 		if (canMove) {
-			if (dash && canDash && !isWallSliding)
+            if (dash && canDash && !isWallSliding)
 			{
 				//m_Rigidbody2D.AddForce(new Vector2(transform.localScale.x * m_DashForce, 0f));
 				StartCoroutine(DashCooldown());
