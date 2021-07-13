@@ -52,6 +52,10 @@ public class CharacterController2D : MonoBehaviour
 	public UnityEvent OnFallEvent;
 	public UnityEvent OnLandEvent;
 
+	public AudioSource getKeySound;
+	public AudioSource deathSound;
+	public AudioSource successSound;
+
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
 
@@ -74,6 +78,7 @@ public class CharacterController2D : MonoBehaviour
         if (col.gameObject.tag == "Key")
         {
             hasKey = true;
+			getKeySound.Play();
             Destroy(col.gameObject);
             Debug.Log("got key");
         }
@@ -94,6 +99,12 @@ public class CharacterController2D : MonoBehaviour
                     { "duration", Time.time - currTime }
                     }
                 );
+				//success sound and play firework
+                if (currLvl == SceneManager.sceneCountInBuildSettings - 1)
+                {
+					successSound.Play();
+
+                }
                 SceneManager.LoadSceneAsync(currLvl + 1);
                 Debug.Log(gameResult);
             }

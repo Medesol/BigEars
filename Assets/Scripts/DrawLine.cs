@@ -28,6 +28,9 @@ public class DrawLine : MonoBehaviour
     //private float totalLength = 150.0f;
     private Dictionary<LineRenderer, float> distanceInfo = new Dictionary<LineRenderer, float>();
 
+    public AudioSource drawSound;
+    public AudioSource eraseSound;
+
     float GetLength(GameObject line) {
     	lineRenderer = line.GetComponent<LineRenderer>();
     	float result = 0;
@@ -48,6 +51,7 @@ public class DrawLine : MonoBehaviour
 	    if (Input.GetMouseButtonDown(0) && mode == 1)
 	    {
 	        CreateLine();
+            drawSound.Play();
         }
 
         if (Input.GetMouseButton(0) && mode == 1)
@@ -58,7 +62,7 @@ public class DrawLine : MonoBehaviour
 	            if (tempDistance > .1f)
 	            {
 	            	distance += tempDistance;
-	            	//totalDistance += tempDistance;
+                    //totalDistance += tempDistance;
 	                UpdateLine(tempFingerPos);
 	            }
         	} else {
@@ -71,6 +75,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && mode == 1)
         {
             FinishLine();
+            drawSound.Stop();
             Debug.Log(distance);
             //if (!distanceInfo.ContainsKey(lineRenderer)) distanceInfo.Add(lineRenderer, distance);
             distance = 0.0f;
@@ -79,6 +84,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && mode == 0) {
         	RemoveLine();
         	RemoveObstacle();
+
         }
 
         if (Input.GetMouseButton(0) && mode == 0) {
