@@ -103,7 +103,6 @@ public class CharacterController2D : MonoBehaviour
                 if (currLvl == SceneManager.sceneCountInBuildSettings - 1)
                 {
 					successSound.Play();
-
                 }
                 SceneManager.LoadSceneAsync(currLvl + 1);
                 Debug.Log(gameResult);
@@ -380,6 +379,7 @@ public class CharacterController2D : MonoBehaviour
 	IEnumerator WaitToDead()
 	{
 		animator.SetBool("IsDead", true);
+		deathSound.Play();
 		canMove = false;
 		invincible = true;
 		GetComponent<Attack>().enabled = false;
