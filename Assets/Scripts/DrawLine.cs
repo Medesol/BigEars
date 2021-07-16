@@ -50,7 +50,6 @@ public class DrawLine : MonoBehaviour
     {
 	    if (EventSystem.current.IsPointerOverGameObject())
 	    {
-		    Debug.Log("Over UI element");
 		    return;
 	    }
 

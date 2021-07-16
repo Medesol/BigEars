@@ -24,13 +24,14 @@ public class ChangButton : MonoBehaviour
     }
 
     public void changeButton() {
+	    Debug.Log("Change Button!");
         changeSound.Play();
         if (mode == 1) {
     		mode = 0;     
-    		this.GetComponent<Image>().sprite = erase;
+    		GetComponent<Image>().sprite = erase;
     	} else if (mode == 0) {
     		mode = 1;
-    		this.GetComponent<Image>().sprite = pencil;
+    		GetComponent<Image>().sprite = pencil;
     		Debug.Log("change button to erase");
     	}
     }
