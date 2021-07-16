@@ -308,15 +308,27 @@ public class CharacterController2D : MonoBehaviour
 		transform.localScale = theScale;
 	}
 
-	public void ApplyDamage(float damage, Vector3 position) 
+	public void ApplyDamage(float damage, Vector3 position)
 	{
 		if (!invincible)
 		{
+			Debug.Log("Life: " + life);
 			animator.SetBool("Hit", true);
 			life -= damage;
-			Vector2 damageDir = Vector3.Normalize(transform.position - position) * 40f ;
-			m_Rigidbody2D.velocity = Vector2.zero;
-			m_Rigidbody2D.AddForce(damageDir * 10);
+			if (position != Vector3.zero)
+			{
+				Vector2 damageDir = Vector3.Normalize(transform.position - position) * 40f;
+				m_Rigidbody2D.velocity = Vector2.zero;
+				m_Rigidbody2D.AddForce(damageDir * 10);
+			}
+			else
+			{
+				Debug.Log("Death Sound Played!");
+				deathSound.Play();
+				return;
+			}
+
+			Debug.Log("Life: " + life);
 			if (life <= 0)
 			{
 				StartCoroutine(WaitToDead());
