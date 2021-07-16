@@ -109,8 +109,15 @@ public class DrawLine : MonoBehaviour
 
         if (hitLeft && hitRight && hitLeft.collider == hitRight.collider)
         {
-            Destroy(hitLeft.collider.gameObject);
+	        eraseSound.Play();
+	        Destroy(hitLeft.collider.gameObject);
         }
+    }
+
+    void PlayEraseSound()
+    {
+	    Debug.Log("Erase Sound Played!");
+	    eraseSound.Play();
     }
 
     void RemoveLine() {
@@ -123,6 +130,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitLeft.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitLeft.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitLeft.collider.gameObject);
         }
         var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), lineCastLength, lineLayerMask);
@@ -133,6 +141,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitRight.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitRight.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitRight.collider.gameObject);
         }
 		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), lineCastLength, lineLayerMask);
@@ -143,6 +152,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitUp.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitUp.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitUp.collider.gameObject);
         }
         var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), lineCastLength, lineLayerMask);
@@ -153,6 +163,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitDown.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitDown.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitDown.collider.gameObject);
         }
     }
