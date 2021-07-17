@@ -55,7 +55,6 @@ public class CharacterController2D : MonoBehaviour
 
 	public AudioSource getKeySound;
 	public AudioSource deathSound;
-	public AudioSource successSound;
 
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
@@ -100,11 +99,6 @@ public class CharacterController2D : MonoBehaviour
                     { "duration", Time.time - currTime }
                     }
                 );
-				//success sound and play firework
-				if (currLvl == SceneManager.sceneCountInBuildSettings - 1)
-				{
-					successSound.Play();
-				}
 
 				if (currLvl == WINNING_LEVEL_ID)
 					SceneManager.LoadSceneAsync(0);
