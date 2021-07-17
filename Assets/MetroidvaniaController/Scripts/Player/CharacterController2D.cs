@@ -14,7 +14,8 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_WallCheck;								//Posicion que controla si el personaje toca una pared
 
-	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    const int WINNING_LEVEL_ID = 6; 
+    const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -54,6 +55,7 @@ public class CharacterController2D : MonoBehaviour
 
 	public AudioSource getKeySound;
 	public AudioSource deathSound;
+	public AudioSource successSound;
 
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
@@ -98,8 +100,18 @@ public class CharacterController2D : MonoBehaviour
                     { "duration", Time.time - currTime }
                     }
                 );
-                SceneManager.LoadSceneAsync(currLvl + 1);
-                Debug.Log(gameResult);
+				//success sound and play firework
+				if (currLvl == SceneManager.sceneCountInBuildSettings - 1)
+				{
+					successSound.Play();
+				}
+
+				if (currLvl == WINNING_LEVEL_ID)
+					SceneManager.LoadSceneAsync(0);
+				else
+					SceneManager.LoadSceneAsync(currLvl + 1);
+
+				Debug.Log(gameResult);
             }
         }
     }
