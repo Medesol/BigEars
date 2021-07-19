@@ -20,5 +20,9 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(i);
     }
-    
+    public void BackHome()
+    {
+        SceneManager.LoadScene("StartMenu-Scene");
+        Debug.Log("Back Home");
+    }
 }
