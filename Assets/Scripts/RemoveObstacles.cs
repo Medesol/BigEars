@@ -8,6 +8,8 @@ public class RemoveObstacles : MonoBehaviour
 
     private int castLength = 30;
     // Start is called before the first frame update
+
+    public AudioSource eraseSound;
     void Start()
     {
         
@@ -28,6 +30,7 @@ public class RemoveObstacles : MonoBehaviour
             if (hitLeft && hitRight && hitLeft.collider == hitRight.collider)
             {
                 Destroy(hitLeft.collider.gameObject);
+                eraseSound.Play();
             }
         }
     }

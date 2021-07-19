@@ -14,7 +14,8 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_WallCheck;								//Posicion que controla si el personaje toca una pared
 
-	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    const int WINNING_LEVEL_ID = 6; 
+    const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -52,6 +53,9 @@ public class CharacterController2D : MonoBehaviour
 	public UnityEvent OnFallEvent;
 	public UnityEvent OnLandEvent;
 
+	public AudioSource getKeySound;
+	public AudioSource deathSound;
+
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
 
@@ -74,6 +78,7 @@ public class CharacterController2D : MonoBehaviour
         if (col.gameObject.tag == "Key")
         {
             hasKey = true;
+			getKeySound.Play();
             Destroy(col.gameObject);
             Debug.Log("got key");
         }
@@ -94,8 +99,13 @@ public class CharacterController2D : MonoBehaviour
                     { "duration", Time.time - currTime }
                     }
                 );
-                SceneManager.LoadSceneAsync(currLvl + 1);
-                Debug.Log(gameResult);
+
+				if (currLvl == WINNING_LEVEL_ID)
+					SceneManager.LoadSceneAsync(0);
+				else
+					SceneManager.LoadSceneAsync(currLvl + 1);
+
+				Debug.Log(gameResult);
             }
         }
     }
@@ -298,15 +308,27 @@ public class CharacterController2D : MonoBehaviour
 		transform.localScale = theScale;
 	}
 
-	public void ApplyDamage(float damage, Vector3 position) 
+	public void ApplyDamage(float damage, Vector3 position)
 	{
 		if (!invincible)
 		{
+			Debug.Log("Life: " + life);
 			animator.SetBool("Hit", true);
 			life -= damage;
-			Vector2 damageDir = Vector3.Normalize(transform.position - position) * 40f ;
-			m_Rigidbody2D.velocity = Vector2.zero;
-			m_Rigidbody2D.AddForce(damageDir * 10);
+			if (position != Vector3.zero)
+			{
+				Vector2 damageDir = Vector3.Normalize(transform.position - position) * 40f;
+				m_Rigidbody2D.velocity = Vector2.zero;
+				m_Rigidbody2D.AddForce(damageDir * 10);
+			}
+			else
+			{
+				Debug.Log("Death Sound Played!");
+				deathSound.Play();
+				return;
+			}
+
+			Debug.Log("Life: " + life);
 			if (life <= 0)
 			{
 				StartCoroutine(WaitToDead());
@@ -369,6 +391,7 @@ public class CharacterController2D : MonoBehaviour
 	IEnumerator WaitToDead()
 	{
 		animator.SetBool("IsDead", true);
+		deathSound.Play();
 		canMove = false;
 		invincible = true;
 		GetComponent<Attack>().enabled = false;

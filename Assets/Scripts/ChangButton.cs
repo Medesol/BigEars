@@ -9,6 +9,8 @@ public class ChangButton : MonoBehaviour
 	public Sprite pencil;
 	public Sprite erase;
 	public int mode = 1; //1 for drawing; 0 for erasing;
+
+    public AudioSource changeSound;//change sound;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +24,14 @@ public class ChangButton : MonoBehaviour
     }
 
     public void changeButton() {
-    	if (mode == 1) {
-    		mode = 0;
-    		this.GetComponent<Image>().sprite = erase;
+	    Debug.Log("Change Button!");
+        changeSound.Play();
+        if (mode == 1) {
+    		mode = 0;     
+    		GetComponent<Image>().sprite = erase;
     	} else if (mode == 0) {
     		mode = 1;
-    		this.GetComponent<Image>().sprite = pencil;
+    		GetComponent<Image>().sprite = pencil;
     		Debug.Log("change button to erase");
     	}
     }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DrawLine : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class DrawLine : MonoBehaviour
     //private float totalLength = 150.0f;
     private Dictionary<LineRenderer, float> distanceInfo = new Dictionary<LineRenderer, float>();
 
+    public AudioSource drawSound;
+    public AudioSource eraseSound;
+
     float GetLength(GameObject line) {
     	lineRenderer = line.GetComponent<LineRenderer>();
     	float result = 0;
@@ -44,10 +48,16 @@ public class DrawLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+	    if (EventSystem.current.IsPointerOverGameObject())
+	    {
+		    return;
+	    }
+
 	    // left click
 	    if (Input.GetMouseButtonDown(0) && mode == 1)
 	    {
 	        CreateLine();
+            drawSound.Play();
         }
 
         if (Input.GetMouseButton(0) && mode == 1)
@@ -58,7 +68,7 @@ public class DrawLine : MonoBehaviour
 	            if (tempDistance > .1f)
 	            {
 	            	distance += tempDistance;
-	            	//totalDistance += tempDistance;
+                    //totalDistance += tempDistance;
 	                UpdateLine(tempFingerPos);
 	            }
         	} else {
@@ -71,6 +81,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && mode == 1)
         {
             FinishLine();
+            drawSound.Stop();
             Debug.Log(distance);
             //if (!distanceInfo.ContainsKey(lineRenderer)) distanceInfo.Add(lineRenderer, distance);
             distance = 0.0f;
@@ -79,6 +90,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && mode == 0) {
         	RemoveLine();
         	RemoveObstacle();
+
         }
 
         if (Input.GetMouseButton(0) && mode == 0) {
@@ -97,8 +109,15 @@ public class DrawLine : MonoBehaviour
 
         if (hitLeft && hitRight && hitLeft.collider == hitRight.collider)
         {
-            Destroy(hitLeft.collider.gameObject);
+	        eraseSound.Play();
+	        Destroy(hitLeft.collider.gameObject);
         }
+    }
+
+    void PlayEraseSound()
+    {
+	    Debug.Log("Erase Sound Played!");
+	    eraseSound.Play();
     }
 
     void RemoveLine() {
@@ -111,6 +130,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitLeft.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitLeft.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitLeft.collider.gameObject);
         }
         var hitRight = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.right), lineCastLength, lineLayerMask);
@@ -121,6 +141,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitRight.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitRight.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitRight.collider.gameObject);
         }
 		var hitUp = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.up), lineCastLength, lineLayerMask);
@@ -131,6 +152,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitUp.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitUp.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitUp.collider.gameObject);
         }
         var hitDown = Physics2D.Raycast(screenMousePosition, transform.TransformDirection(Vector2.down), lineCastLength, lineLayerMask);
@@ -141,6 +163,7 @@ public class DrawLine : MonoBehaviour
         	//totalDistance -= distanceInfo[hitDown.collider.gameObject.GetComponent<LineRenderer>()];
         	//distanceInfo.Remove(hitDown.collider.gameObject.GetComponent<LineRenderer>());
         	//Debug.Log(totalDistance);
+            PlayEraseSound();
         	Destroy(hitDown.collider.gameObject);
         }
     }
