@@ -795,6 +795,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6028785684703404158, guid: 52d648d7b1cab724c9873d6826d46d0b,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028785684703404158, guid: 52d648d7b1cab724c9873d6826d46d0b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028785684703404158, guid: 52d648d7b1cab724c9873d6826d46d0b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028785684703404158, guid: 52d648d7b1cab724c9873d6826d46d0b,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2576,7 +2591,7 @@ GameObject:
   - component: {fileID: 497934715}
   - component: {fileID: 497934717}
   - component: {fileID: 497934716}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ground (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2641,7 +2656,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f7ae16364b516854e9d432c26bfc2892, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4727,8 +4742,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320126754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 53.08, y: 1, z: 10}
-  m_LocalScale: {x: 0.6628942, y: 1.1942112, z: 1}
+  m_LocalPosition: {x: 53.06, y: 1, z: 10}
+  m_LocalScale: {x: 0.6628942, y: 0.8859778, z: 1}
   m_Children: []
   m_Father: {fileID: 1513296260}
   m_RootOrder: 16
